@@ -7,19 +7,25 @@ import styled from "styled-components";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
 import Loading from "../components/Loading";
+import img from "../img/background.jpeg";
+import LogoImage from "../img/logo.png";
 
 const Container = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	height: 100vh;
+	background-image: url(${img});
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 `;
 
 const StyledCard = styled.div`
 	display: flex;
 	background: #ffffff;
 	border-radius: 10px;
-	box-shadow: 0 10px 40px -14px rgba(0, 0, 0, 0.25);
+	box-shadow: 0 10px 40px -14px rgba(99, 83, 83, 0.25);
 	padding: 30px;
 	margin: 10px;
 	flex-flow: column;
@@ -117,8 +123,13 @@ function LoginPage(props) {
 		<Container>
 			<StyledCard>
 				<Loading loading={loading} absolute />
-				{/* <Row style={{ marginBottom: 50 }}>
-					<img src={LogoImage} width="100%" height="40" alt="logo" />
+				{/* <Row>
+					<img
+						src={LogoImage}
+						width="100%"
+						height="100%"
+						alt="logo"
+					/>
 				</Row> */}
 				<Row>Usuário</Row>
 				<Row>

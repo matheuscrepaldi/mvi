@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
+
+import { lightTheme, darkTheme } from "../styles/theme";
 import Menu from "./Menu";
 
 const Container = styled.div`
@@ -23,11 +25,15 @@ const Body = styled.div`
 `;
 
 function Layout(props) {
+	const [isDarkTheme, setIsDarkTheme] = useState(false);
+
 	return (
-		<Container>
-			<Menu />
-			<Body id="container">{props.children}</Body>
-		</Container>
+		<ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+			<Container>
+				<Menu handleTheme={() => setIsDarkTheme(!isDarkTheme)} />
+				<Body id="container">{props.children}</Body>
+			</Container>
+		</ThemeProvider>
 	);
 }
 export default withRouter(Layout);

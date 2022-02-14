@@ -10,7 +10,7 @@ const Button = styled.button`
 	text-align: center;
 	font-size: 14px;
 	color: #fff;
-	background-color: #59bfff;
+	background-color: #0a2640;
 	width: ${(props) => (props.small ? "40px" : "auto")};
 	min-width: ${(props) => (props.small ? "40px" : "100px")};
 	height: 40px;
