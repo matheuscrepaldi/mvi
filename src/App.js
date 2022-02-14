@@ -1,36 +1,30 @@
-import "./App.css";
-import xlsxParser from "xlsx-parse-json";
+import React from "react";
+import { BrowserRouter as Router, Switch, withRouter } from "react-router-dom";
+
+import PrivateRoute from "./routes/PrivateRoute";
+import PublicRoute from "./routes/PublicRoute";
+import Layout from "./components/Layout";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
 
 function App() {
-	const readUploadFile = (e) => {
-		e.preventDefault();
-		if (e.target.files) {
-			xlsxParser.onFileSelection(e.target.files[0]).then((data) => {
-				let arrays = [];
-
-				const result = Object.values(data);
-				result.map((res) => {
-					arrays = arrays.concat(res);
-				});
-
-				const filtered = arrays.filter((ar) => ar.Produto !== "");
-				console.log(filtered);
-			});
-		}
-	};
-
 	return (
-		<div className="App">
-			<form>
-				<label htmlFor="upload">Upload File</label>
-				<input
-					type="file"
-					name="upload"
-					id="upload"
-					onChange={readUploadFile}
+		<Router>
+			<Switch>
+				<PublicRoute
+					restricted={false}
+					component={Login}
+					path="/"
+					exact
 				/>
-			</form>
-		</div>
+
+				<Layout>
+					<Switch>
+						<PrivateRoute component={Home} path="/home" exact />
+					</Switch>
+				</Layout>
+			</Switch>
+		</Router>
 	);
 }
 
