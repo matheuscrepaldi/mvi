@@ -10,8 +10,8 @@ const Button = styled.button`
 	text-align: center;
 	font-size: 14px;
 	color: #fff;
-	background-color: #0a2640;
-	width: ${(props) => (props.small ? "40px" : "auto")};
+	background-color: ${({ theme }) => theme.primary};
+	width: ${(props) => (props.small ? "40px" : "100%")};
 	min-width: ${(props) => (props.small ? "40px" : "100px")};
 	height: 40px;
 	border: none;
@@ -23,7 +23,8 @@ const Button = styled.button`
 	box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
 	:hover {
 		box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
-		background-color: #0da2ff;
+		background-color: ${({ theme }) => theme.primaryDark};
+		transform: scale(1.05);
 	}
 
 	:disabled {

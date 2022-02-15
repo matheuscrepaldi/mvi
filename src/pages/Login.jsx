@@ -8,7 +8,7 @@ import Button from "../components/Button";
 import { Input } from "../components/Input";
 import Loading from "../components/Loading";
 import img from "../img/background.jpeg";
-import LogoImage from "../img/logo.png";
+import LogoImage from "../img/mvi.png";
 
 const Container = styled.div`
 	display: flex;
@@ -21,7 +21,7 @@ const Container = styled.div`
 	background-size: cover;
 `;
 
-const StyledCard = styled.div`
+const StyledCardFront = styled.div`
 	display: flex;
 	background: #ffffff;
 	border-radius: 10px;
@@ -32,11 +32,51 @@ const StyledCard = styled.div`
 	justify-content: center;
 	align-items: center;
 	width: 400px;
-	height: 500px;
+	height: 70vh;
 	border-radius: 20px;
-	z-index: 0;
+
 	overflow: hidden;
-	position: relative;
+	position: absolute;
+	z-index: 3;
+	transform: rotate(0deg);
+	-moz-transform: rotate(0deg);
+	transition: 1s transform;
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
+
+	&.flip {
+		transform: rotateY(180deg);
+		-moz-transform: rotateY(180deg);
+	}
+`;
+
+const StyledCardBack = styled.div`
+	display: flex;
+	background: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0 10px 40px -14px rgba(99, 83, 83, 0.25);
+	padding: 30px;
+	margin: 10px;
+	flex-flow: column;
+	justify-content: flex-start;
+	align-items: center;
+	width: 400px;
+	height: 70vh;
+	border-radius: 20px;
+
+	overflow: hidden;
+	position: absolute;
+	z-index: 1;
+	transform: rotateY(-180deg);
+	-moz-transform: rotateY(-180deg);
+	transition: 1s transform;
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
+
+	&.flip {
+		transform: rotateY(0deg);
+		-moz-transform: rotateY(0deg);
+	}
 `;
 
 const Row = styled.div`
@@ -51,10 +91,20 @@ const Version = styled.span`
 	color: #ccc;
 `;
 
+const ButtonLogin = styled(Button)`
+	background-color: #1f75c4;
+
+	:hover {
+		background-color: #0a2640;
+	}
+`;
+
 function LoginPage(props) {
 	const [loading, setLoading] = useState(false);
 	const [email, setEmail] = useState("");
+	const [user, setUser] = useState("");
 	const [password, setPassword] = useState("");
+	const [card, setCard] = useState("login");
 
 	useEffect(() => {
 		const session = JSON.parse(sessionStorage.getItem("session"));
@@ -65,6 +115,10 @@ function LoginPage(props) {
 
 		setLoading(false);
 	}, [props.history]);
+
+	function handleUserChange(e) {
+		setUser(e.target.value);
+	}
 
 	function handleEmailChange(e) {
 		setEmail(e.target.value);
@@ -97,11 +151,8 @@ function LoginPage(props) {
 
 					const session = {
 						user: email,
-						status,
+						nome: user,
 						token: data.Token,
-						owner: isAdmin ? "" : data.Owner,
-						role: data.Role,
-						funeraria: data.Funeraria,
 					};
 
 					sessionStorage.setItem("session", JSON.stringify(session));
@@ -119,19 +170,23 @@ function LoginPage(props) {
 			});
 	}
 
+	async function handleCreateUser() {
+		console.log("cadsatrar usuario");
+	}
+
 	return (
 		<Container>
-			<StyledCard>
+			<StyledCardFront className={card === "cadastro" && "flip"}>
 				<Loading loading={loading} absolute />
-				{/* <Row>
+				<Row style={{ justifyContent: "center" }}>
 					<img
 						src={LogoImage}
-						width="100%"
-						height="100%"
+						width="150px"
+						height="150px"
 						alt="logo"
 					/>
-				</Row> */}
-				<Row>Usuário</Row>
+				</Row>
+				<Row>Email</Row>
 				<Row>
 					<Input onChange={handleEmailChange} />
 				</Row>
@@ -140,10 +195,50 @@ function LoginPage(props) {
 					<Input onChange={handlePasswordChange} type="password" />
 				</Row>
 				<Row style={{ justifyContent: "center" }}>
-					<Button onClick={handleLoginFormSubmit}>Entrar</Button>
+					<ButtonLogin onClick={handleLoginFormSubmit}>
+						Entrar
+					</ButtonLogin>
+				</Row>
+				<Row style={{ justifyContent: "center" }}>
+					<a href="#" onClick={() => setCard("cadastro")}>
+						Registrar-se
+					</a>
 				</Row>
 				<Version>v1.0.0</Version>
-			</StyledCard>
+			</StyledCardFront>
+
+			<StyledCardBack className={card === "cadastro" && "flip"}>
+				<Loading loading={loading} absolute />
+				<Row style={{ justifyContent: "center" }}>
+					<img
+						src={LogoImage}
+						width="150px"
+						height="150px"
+						alt="logo"
+					/>
+				</Row>
+				<Row>Nome</Row>
+				<Row>
+					<Input onChange={handleUserChange} />
+				</Row>
+				<Row>Email</Row>
+				<Row>
+					<Input onChange={handleEmailChange} />
+				</Row>
+				<Row>Senha</Row>
+				<Row>
+					<Input onChange={handlePasswordChange} type="password" />
+				</Row>
+				<Row style={{ justifyContent: "center" }}>
+					<ButtonLogin onClick={() => setCard("login")}>
+						Voltar
+					</ButtonLogin>
+					<ButtonLogin onClick={handleCreateUser}>
+						Registrar
+					</ButtonLogin>
+				</Row>
+				<Version>v1.0.0</Version>
+			</StyledCardBack>
 		</Container>
 	);
 }

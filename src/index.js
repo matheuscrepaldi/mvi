@@ -1,17 +1,34 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Router } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import { ToastContainer } from "react-toastify";
+import axios from "axios";
+
+import App from "./App";
+import "./index.css";
+import { isLogin } from "./routes/isLoggedIn";
+import "react-toastify/dist/ReactToastify.css";
+
+const history = createBrowserHistory();
+
+axios.defaults.baseURL = "https://cef-cloud-dev.herokuapp.com/";
+axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.headers.put["Content-Type"] = "application/json";
+axios.defaults.headers.get["Content-Type"] = "application/json";
+
+axios.interceptors.request.use(function (config) {
+	const session = isLogin();
+	config.headers.Authorization = session && session.token;
+	config.params = config.params || {};
+	config.params["cdOwner"] = session.owner;
+	return config;
+});
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+	<Router history={history}>
+		<App />
+		<ToastContainer autoClose={3000} />
+	</Router>,
+	document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
