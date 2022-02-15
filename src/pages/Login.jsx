@@ -135,7 +135,7 @@ function LoginPage(props) {
 		}
 
 		const body = {
-			usu_email: email,
+			usu_nome: email,
 			usu_senha: password,
 		};
 
