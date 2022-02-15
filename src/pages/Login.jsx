@@ -135,8 +135,8 @@ function LoginPage(props) {
 		}
 
 		const body = {
-			username: email,
-			password,
+			usu_email: email,
+			usu_senha: password,
 		};
 
 		setLoading(true);
@@ -171,6 +171,7 @@ function LoginPage(props) {
 	}
 
 	async function handleCreateUser() {
+		//to do
 		console.log("cadsatrar usuario");
 	}
 
