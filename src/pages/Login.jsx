@@ -130,12 +130,12 @@ function LoginPage(props) {
 
 	async function handleLoginFormSubmit() {
 		if (email === "" || password === "") {
-			toast.error("Por favor, informe usuário e senha");
+			toast.error("Por favor, informe email e senha");
 			return;
 		}
 
 		const body = {
-			usu_nome: email,
+			usu_email: email,
 			usu_senha: password,
 		};
 
@@ -147,11 +147,11 @@ function LoginPage(props) {
 				const status = response.status || {};
 				if (status === 200) {
 					const data = response.data || {};
-					const isAdmin = data.Role === "ROLE_ADMIN";
 
 					const session = {
+						id: data.Id,
 						user: email,
-						nome: user,
+						nome: data.Nome,
 						token: data.Token,
 					};
 
@@ -171,8 +171,37 @@ function LoginPage(props) {
 	}
 
 	async function handleCreateUser() {
-		//to do
-		console.log("cadsatrar usuario");
+		if (email === "" || user === "" || password === "") {
+			toast.error("Por favor, preencha todos os campos");
+			return;
+		}
+
+		const body = {
+			usu_nome: user,
+			usu_senha: password,
+			usu_email: email,
+		};
+
+		setLoading(true);
+
+		axios
+			.post("signup", body)
+			.then(function (response) {
+				const status = response.status || {};
+				if (status === 200) {
+					setLoading(false);
+					setCard("login");
+					toast.success("Usuário criado com sucesso");
+				} else {
+					setLoading(false);
+					toast.error("Erro ao criar usuário");
+				}
+			})
+			.catch(function (error) {
+				setLoading(false);
+				console.log(error);
+				toast.error("Erro ao criar usuário");
+			});
 	}
 
 	return (

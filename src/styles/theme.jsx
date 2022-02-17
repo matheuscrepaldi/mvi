@@ -4,6 +4,8 @@ export const lightTheme = {
 	primaryDark: "#0a2640",
 	text: "#2C2738",
 	accent: "#0880AE",
+	danger: "#dc3545",
+	dangerDark: "#a71d2a",
 };
 
 export const darkTheme = {

@@ -60,4 +60,9 @@ const TextArea = styled.textarea`
 	resize: none;
 `;
 
-export { Input, Select, TextArea };
+const InputFile = styled.input`
+	${defaultProps};
+	display: none;
+`;
+
+export { Input, Select, TextArea, InputFile };

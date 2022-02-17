@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
 import { isLogin } from "../routes/isLoggedIn";
@@ -79,6 +78,7 @@ const Dropbtn = styled.button`
 	overflow: hidden;
 	outline: none;
 
+	&.selected,
 	:hover {
 		background: #0075bf;
 	}
@@ -86,44 +86,39 @@ const Dropbtn = styled.button`
 
 function Menu() {
 	const session = isLogin();
-	const isAdmin = session && session.role === "ROLE_ADMIN";
-	const [logged, setLogged] = useState("");
-
-	useEffect(() => {
-		if (isAdmin) {
-			axios
-				.get(`listarFunerariaById/${session.owner}`)
-				.then(function (response) {
-					const data = response.data || {};
-					setLogged(data.nome_owner.toUpperCase());
-				})
-				.catch(function (error) {
-					console.log(error);
-				});
-		} else {
-			setLogged(`Olá, ${session.user.toUpperCase()}`);
-		}
-	}, []);
+	const user = session.nome.toUpperCase();
 
 	const handleLogout = () => {
 		sessionStorage.removeItem("session");
 	};
 
+	const path = window.location.pathname;
+
 	return (
 		<Navbar>
 			<Row>
 				<Row style={{ width: "20%", paddingLeft: 20 }}>
-					<Title textWhite>{logged}</Title>
+					<Title textWhite>{`Olá, ${user}`}</Title>
 				</Row>
 				<Row style={{ justifyContent: "center" }}>
-					<StyledLink to={"/home"}>1</StyledLink>
-					<StyledLink to={"/home"}>2</StyledLink>
-					<StyledLink to={"/home"}>3</StyledLink>
-				</Row>
-				<List style={{ width: "20%" }}>
-					<Dropbtn>
+					<Dropbtn className={path === "/home" && "selected"}>
 						<StyledLink to={"/home"}>Home</StyledLink>
 					</Dropbtn>
+					<Dropbtn className={path === "/metas" && "selected"}>
+						<StyledLink to={"/metas"}>Metas</StyledLink>
+					</Dropbtn>
+					<Dropbtn
+						className={path === "/rebalanceamento" && "selected"}
+					>
+						<StyledLink to={"/rebalanceamento"}>
+							Rebalanceamento
+						</StyledLink>
+					</Dropbtn>
+					<Dropbtn className={path === "/mdi" && "selected"}>
+						<StyledLink to={"/mdi"}>MDI</StyledLink>
+					</Dropbtn>
+				</Row>
+				<List style={{ width: "20%" }}>
 					<Dropbtn>
 						<StyledLink to={""} onClick={handleLogout}>
 							Sair
