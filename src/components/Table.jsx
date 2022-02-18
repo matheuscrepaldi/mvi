@@ -1,9 +1,11 @@
 import styled from "styled-components";
 
+import CollapseHeader from "./CollapseHeader";
+import CollapseBody from "./CollapseBody";
+
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
-	border: 1px solid black;
 	width: 100%;
 	height: fit-content;
 `;
@@ -14,27 +16,75 @@ const Row = styled.div`
 
 const Column = styled.div`
 	display: flex;
-
+	align-items: center;
 	padding: 5px;
 	flex: 1;
+	border-bottom: 0.5px solid #d8d8d8;
 `;
 
-function Table(props) {
+function Table({ columns, data, collapsed, handleCollapse }) {
 	return (
 		<Container>
-			<Row>
-				{props.columns.map((column) => {
-					return <Column>{column.header}</Column>;
-				})}
-			</Row>
-			{props.data.map((dt) => {
-				return (
-					<Row>
-						{props.columns.map((column) => {
-							return <Column>{dt[column.acessor]}</Column>;
-						})}
-					</Row>
-				);
+			{data.map((filtered, i) => {
+				if (filtered.length) {
+					const title =
+						i === 0 ? "Ações" : i === 1 ? "Fiis" : "Renda Fixa";
+
+					return (
+						<>
+							<CollapseHeader
+								title={title}
+								collapsed={collapsed !== title}
+								handleCollapse={() => handleCollapse(title)}
+							/>
+							<CollapseBody
+								className={`${
+									collapsed !== title && "collapsed"
+								}`}
+							>
+								<Row>
+									{columns.map((column) => {
+										return (
+											<Column
+												style={{
+													justifyContent: "center",
+												}}
+											>
+												{column.header}
+											</Column>
+										);
+									})}
+								</Row>
+								{filtered.map((dt) => {
+									return (
+										<Row>
+											{columns.map((column) => {
+												const align =
+													column.type === "number"
+														? "center"
+														: "flex-start";
+
+												return (
+													<Column
+														style={{
+															justifyContent:
+																align,
+															color: "#808080",
+														}}
+													>
+														{dt[column.acessor]}
+													</Column>
+												);
+											})}
+										</Row>
+									);
+								})}
+							</CollapseBody>
+						</>
+					);
+				} else {
+					return;
+				}
 			})}
 		</Container>
 	);

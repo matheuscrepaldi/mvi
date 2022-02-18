@@ -101,8 +101,8 @@ function Menu() {
 					<Title textWhite>{`Olá, ${user}`}</Title>
 				</Row>
 				<Row style={{ justifyContent: "center" }}>
-					<Dropbtn className={path === "/home" && "selected"}>
-						<StyledLink to={"/home"}>Home</StyledLink>
+					<Dropbtn className={path === "/dashboard" && "selected"}>
+						<StyledLink to={"/dashboard"}>Dashboard</StyledLink>
 					</Dropbtn>
 					<Dropbtn className={path === "/metas" && "selected"}>
 						<StyledLink to={"/metas"}>Metas</StyledLink>

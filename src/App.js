@@ -20,7 +20,11 @@ function App() {
 
 				<Layout>
 					<Switch>
-						<PrivateRoute component={Home} path="/home" exact />
+						<PrivateRoute
+							component={Home}
+							path="/dashboard"
+							exact
+						/>
 					</Switch>
 				</Layout>
 			</Switch>

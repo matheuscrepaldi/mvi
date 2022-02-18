@@ -110,7 +110,7 @@ function LoginPage(props) {
 		const session = JSON.parse(sessionStorage.getItem("session"));
 
 		if (session && session.status === 200) {
-			props.history.push("/home");
+			props.history.push("/dashboard");
 		}
 
 		setLoading(false);
@@ -158,7 +158,7 @@ function LoginPage(props) {
 
 					sessionStorage.setItem("session", JSON.stringify(session));
 					setLoading(false);
-					props.history.push("/home");
+					props.history.push("/dashboard");
 				} else {
 					setLoading(false);
 					toast.error("Erro ao realizar login");

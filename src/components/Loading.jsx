@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
-	background: #f3f5f9b8;
+	/* background: #f3f5f9b8; */
 	display: flex;
 	align-items: center;
 	justify-content: center;
