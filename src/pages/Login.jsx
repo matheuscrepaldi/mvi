@@ -150,6 +150,7 @@ function LoginPage(props) {
 
 					const session = {
 						id: data.Id,
+						status,
 						user: email,
 						nome: data.Nome,
 						token: data.Token,
