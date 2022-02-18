@@ -7,21 +7,15 @@ const isLogin = () => {
 	return false;
 };
 
-const getOwner = () => {
+const getUser = () => {
 	const loggedUser = isLogin();
 
 	if (loggedUser) {
-		const properties = loggedUser.funeraria?.split(", ");
-		let obj = {};
-		properties.forEach(function (property) {
-			const tup = property.split("=");
-			obj[tup[0]] = tup[1];
-		});
-
-		return obj;
+		const user = loggedUser?.id;
+		return user;
 	}
 
 	return false;
 };
 
-export { isLogin, getOwner };
+export { isLogin, getUser };

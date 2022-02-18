@@ -153,47 +153,47 @@ const Upload = () => {
 			const filtered = arrays.filter((ar) => ar.Produto !== "");
 
 			const body = filtered.map((fil) => {
-				let cart_ticker = "";
-				let cart_emp = "";
-				let cart_qtd = "";
-				let cart_vlr_unit = "";
-				let cart_vlr_total = "";
+				let ativo_ticker = "";
+				let ativo_emp = "";
+				let ativo_qtd = "";
+				let ativo_vlr_unit = "";
+				let ativo_vlr_total = "";
 
-				const cart_tipo =
+				const ativo_tipo =
 					fil["Tipo"] === "Cotas"
 						? "FII"
 						: !fil["Tipo"]
 						? "FIXA"
 						: "AÇÃO";
 
-				if (cart_tipo === "FII") {
-					cart_ticker = fil["Código de Negociação"];
-					cart_emp = fil["Produto"];
-					cart_qtd = fil["Quantidade Disponível"];
-					cart_vlr_unit = fil["Preço de Fechamento"];
-					cart_vlr_total = fil["Valor Atualizado"];
-				} else if (cart_tipo === "FIXA") {
-					cart_ticker = fil["Indexador"];
-					cart_emp = fil["Produto"];
-					cart_qtd = fil["Quantidade Disponível"];
-					cart_vlr_unit = fil["Valor bruto"];
-					cart_vlr_total = fil["Valor Atualizado"];
+				if (ativo_tipo === "FII") {
+					ativo_ticker = fil["Código de Negociação"];
+					ativo_emp = fil["Produto"];
+					ativo_qtd = fil["Quantidade Disponível"];
+					ativo_vlr_unit = fil["Preço de Fechamento"];
+					ativo_vlr_total = fil["Valor Atualizado"];
+				} else if (ativo_tipo === "FIXA") {
+					ativo_ticker = fil["Indexador"];
+					ativo_emp = fil["Produto"];
+					ativo_qtd = fil["Quantidade Disponível"];
+					ativo_vlr_unit = fil["Valor bruto"];
+					ativo_vlr_total = fil["Valor Atualizado"];
 				} else {
-					cart_ticker = fil["Código de Negociação"];
-					cart_emp = fil["Produto"];
-					cart_qtd = fil["Quantidade Disponível"];
-					cart_vlr_unit = fil["Preço de Fechamento"];
-					cart_vlr_total = fil["Valor Atualizado"];
+					ativo_ticker = fil["Código de Negociação"];
+					ativo_emp = fil["Produto"];
+					ativo_qtd = fil["Quantidade Disponível"];
+					ativo_vlr_unit = fil["Preço de Fechamento"];
+					ativo_vlr_total = fil["Valor Atualizado"];
 				}
 
 				return {
 					usu_id: user,
-					cart_ticker,
-					cart_emp,
-					cart_tipo,
-					cart_qtd,
-					cart_vlr_unit,
-					cart_vlr_total,
+					ativo_ticker,
+					ativo_emp,
+					ativo_tipo,
+					ativo_qtd,
+					ativo_vlr_unit,
+					ativo_vlr_total,
 				};
 			});
 
