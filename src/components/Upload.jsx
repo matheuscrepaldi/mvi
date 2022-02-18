@@ -22,7 +22,7 @@ const DeleteButton = styled(MdDelete)`
 	}
 `;
 
-const Upload = () => {
+const Upload = ({ uploadCarteira }) => {
 	const fileInputRef = useRef();
 	const [selectedFiles, setSelectedFiles] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -204,11 +204,13 @@ const Upload = () => {
 					setSelectedFiles([]);
 					setValidFiles([]);
 					toast.success("Dados importados com sucesso");
+					uploadCarteira(true);
 				})
 				.catch(function (error) {
 					setLoading(false);
 					console.log(error);
 					toast.error("Erro ao importar dados");
+					uploadCarteira(false);
 				});
 		});
 	};

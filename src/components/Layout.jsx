@@ -19,8 +19,8 @@ const Body = styled.div`
 	flex-grow: 1;
 	padding: 30px;
 	max-width: 100%;
-	margin-top: 80px;
-	height: calc(100vh - 80px);
+	margin-top: 50px;
+	height: calc(100vh - 50px);
 	overflow: auto;
 `;
 
