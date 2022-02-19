@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { GiWallet } from "react-icons/gi";
-import { RiEyeLine, RiEyeCloseLine } from "react-icons/ri";
+import { RiEyeCloseLine } from "react-icons/ri";
 import { FaRegEye } from "react-icons/fa";
 
 import { getUser } from "../routes/isLoggedIn";
@@ -181,6 +181,7 @@ function Home() {
 					(carteira.length ? (
 						<Table
 							columns={columns}
+							showValue={showValue}
 							data={[acoes, fiis, fixa]}
 							total={total}
 							collapsed={collapsed}

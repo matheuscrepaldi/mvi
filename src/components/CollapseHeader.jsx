@@ -6,6 +6,7 @@ import Title from "./Title";
 import Button from "./Button";
 import Text from "./Text";
 import ProgressBar from "./ProgressBar";
+import Column from "./Column";
 
 const LeftPanel = styled.div`
 	display: flex;
@@ -33,7 +34,14 @@ const CollapseRow = styled(Row)`
 	box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.25);
 `;
 
-function CollapseHeader({ title, collapsed, handleCollapse, ativos, total }) {
+function CollapseHeader({
+	title,
+	collapsed,
+	handleCollapse,
+	ativos,
+	total,
+	showValue,
+}) {
 	const theme = useTheme();
 
 	const color =
@@ -61,7 +69,23 @@ function CollapseHeader({ title, collapsed, handleCollapse, ativos, total }) {
 			</LeftPanel>
 			<RightPanel>
 				<Text textBlack>{ativos.length} ativos</Text>
-				<ProgressBar title={title} width={width} color={color} />
+				<Column>
+					<Row style={{ margin: 0 }}>
+						<Title style={{ color }}>
+							{showValue
+								? width.toFixed(2).replace(".", ",")
+								: "****"}
+							%
+						</Title>
+						<Text>
+							R$
+							{showValue
+								? valorTotal.toFixed(2).replace(".", ",")
+								: "****"}
+						</Text>
+					</Row>
+					<ProgressBar title={title} width={width} color={color} />
+				</Column>
 				<SmallButton
 					type="button"
 					style={{ background: color }}

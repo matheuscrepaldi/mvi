@@ -4,7 +4,7 @@ const Bar = styled.div`
 	display: flex;
 	height: 5px;
 	width: 100%;
-	max-width: 200px;
+	max-width: 250px;
 	background-color: #e0e0de;
 	border-radius: 50px;
 	margin: 5px;

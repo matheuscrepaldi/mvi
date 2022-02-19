@@ -26,7 +26,7 @@ const Column = styled.div`
 	border-bottom: 0.5px solid #d8d8d8;
 `;
 
-function Table({ columns, data, collapsed, handleCollapse, total }) {
+function Table({ columns, data, collapsed, handleCollapse, total, showValue }) {
 	return (
 		<Container>
 			{data.map((filtered, i) => {
@@ -38,6 +38,7 @@ function Table({ columns, data, collapsed, handleCollapse, total }) {
 						<>
 							<CollapseHeader
 								title={title}
+								showValue={showValue}
 								ativos={filtered}
 								total={total}
 								collapsed={collapsed !== title}
