@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 const Title = styled.h2`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	font-size: ${(props) =>
 		props.big ? "2em" : props.medium ? "1.2em" : "1em"};
 	text-align: center;

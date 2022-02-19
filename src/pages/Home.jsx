@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
 import { toast } from "react-toastify";
 import { GiWallet } from "react-icons/gi";
+import { RiEyeLine, RiEyeCloseLine } from "react-icons/ri";
+import { FaRegEye } from "react-icons/fa";
 
 import { getUser } from "../routes/isLoggedIn";
 import Upload from "../components/Upload";
@@ -13,6 +16,18 @@ import Button from "../components/Button";
 import Container from "../components/Container";
 import Modal from "../components/Modal";
 
+const EyeClosed = styled(RiEyeCloseLine)`
+	:hover {
+		cursor: pointer;
+	}
+`;
+
+const EyeOpened = styled(FaRegEye)`
+	:hover {
+		cursor: pointer;
+	}
+`;
+
 function Home() {
 	const [loading, setLoading] = useState(false);
 	const [carteira, setCarteira] = useState([]);
@@ -21,6 +36,8 @@ function Home() {
 	const [acoes, setAcoes] = useState([]);
 	const [fiis, setFiis] = useState([]);
 	const [fixa, setFixa] = useState([]);
+	const [total, setTotal] = useState(0);
+	const [showValue, setShowValue] = useState(true);
 	const user = getUser();
 
 	useEffect(() => {
@@ -39,6 +56,13 @@ function Home() {
 	}, [user]);
 
 	useEffect(() => {
+		let valorTotal = 0;
+		carteira.map((cart) => {
+			valorTotal += Number(cart.ativo_vlr_total);
+
+			return cart;
+		});
+
 		const filteredAcoes = carteira.filter(
 			(cart) => cart.ativo_tipo === "AÇÃO"
 		);
@@ -49,21 +73,10 @@ function Home() {
 			(cart) => cart.ativo_tipo === "FIXA"
 		);
 
+		setTotal(valorTotal);
 		setAcoes(filteredAcoes);
 		setFiis(filteredFiis);
 		setFixa(filteredFixa);
-
-		// carteira.map((dt) => {
-		// 	if (dt.ativo_tipo === "AÇÃO") {
-		// 		setAcoes([...acoes, dt]);
-		// 	} else if (dt.ativo_tipo === "FII") {
-		// 		setFiis([...fiis, dt]);
-		// 	} else {
-		// 		setFixa([...fixa, dt]);
-		// 	}
-
-		// 	return dt;
-		// });
 	}, [carteira]);
 
 	const uploadCarteira = async (uploaded) => {
@@ -120,7 +133,6 @@ function Home() {
 
 	const columns = [
 		{ header: "Ticker", acessor: "ativo_ticker", type: "string" },
-		// { header: "Empresa", acessor: "ativo_emp", type: "string" },
 		{ header: "Quantidade", acessor: "ativo_qtd", type: "number" },
 		{ header: "Valor Unitário", acessor: "ativo_vlr_unit", type: "number" },
 		{ header: "Valor Total", acessor: "ativo_vlr_total", type: "number" },
@@ -138,10 +150,30 @@ function Home() {
 			<Container showModal={showModal}>
 				<Loading loading={loading} absolute />
 				<Row>
-					<Title big>Minha Carteira</Title>
+					<div>
+						<Title big>Minha Carteira</Title>
+						<Title medium>
+							Patrimônio: R$
+							{showValue
+								? total.toFixed(2).replace(".", ",")
+								: "****"}
+							{showValue ? (
+								<EyeOpened
+									size={25}
+									onClick={() => setShowValue(!showValue)}
+								/>
+							) : (
+								<EyeClosed
+									size={25}
+									onClick={() => setShowValue(!showValue)}
+								/>
+							)}
+						</Title>
+					</div>
+
 					{carteira.length > 0 && (
 						<Button danger small onClick={handleToggleModal}>
-							<GiWallet />
+							<GiWallet size={25} />
 						</Button>
 					)}
 				</Row>
@@ -150,6 +182,7 @@ function Home() {
 						<Table
 							columns={columns}
 							data={[acoes, fiis, fixa]}
+							total={total}
 							collapsed={collapsed}
 							handleCollapse={handleCollapse}
 						/>

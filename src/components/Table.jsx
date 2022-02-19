@@ -12,6 +12,10 @@ const Container = styled.div`
 
 const Row = styled.div`
 	display: flex; /* the child elements would be grid items */
+
+	:nth-child(2n + 2) {
+		background: #f2f2f2;
+	}
 `;
 
 const Column = styled.div`
@@ -22,7 +26,7 @@ const Column = styled.div`
 	border-bottom: 0.5px solid #d8d8d8;
 `;
 
-function Table({ columns, data, collapsed, handleCollapse }) {
+function Table({ columns, data, collapsed, handleCollapse, total }) {
 	return (
 		<Container>
 			{data.map((filtered, i) => {
@@ -34,6 +38,8 @@ function Table({ columns, data, collapsed, handleCollapse }) {
 						<>
 							<CollapseHeader
 								title={title}
+								ativos={filtered}
+								total={total}
 								collapsed={collapsed !== title}
 								handleCollapse={() => handleCollapse(title)}
 							/>
