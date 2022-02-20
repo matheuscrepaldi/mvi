@@ -71,6 +71,21 @@ function Table({ columns, data, collapsed, handleCollapse, total, showValue }) {
 														? "center"
 														: "flex-start";
 
+												const value =
+													column.type === "number"
+														? Number(
+																dt[
+																	column
+																		.acessor
+																]
+														  )
+																.toFixed(2)
+																.replace(
+																	".",
+																	","
+																)
+														: dt[column.acessor];
+
 												return (
 													<Column
 														style={{
@@ -79,7 +94,7 @@ function Table({ columns, data, collapsed, handleCollapse, total, showValue }) {
 															color: "#808080",
 														}}
 													>
-														{dt[column.acessor]}
+														{value}
 													</Column>
 												);
 											})}

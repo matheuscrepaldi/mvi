@@ -15,15 +15,32 @@ const Progress = styled.div`
 	height: 100%;
 	width: ${(props) => props.width + "%"};
 	background-color: ${(props) => (props.width > 0 ? props.color : "#e0e0de")};
-	border-radius: "inherit";
+	margin-left: ${(props) => props.padLeft + "px"};
 `;
 
 function ProgressBar({ title, width, color }) {
+	const acaoWidth = document?.getElementById(`acao_Ações`)?.offsetWidth;
+	const fiiWidth = document?.getElementById(`fii_Fiis`)?.offsetWidth;
+
 	return (
 		<Bar>
-			<Progress width={title === "Ações" && width} color={color} />
-			<Progress width={title === "Fiis" && width} color={color} />
-			<Progress width={title === "Renda Fixa" && width} color={color} />
+			<Progress
+				id={`acao_${title}`}
+				width={title === "Ações" ? width : undefined}
+				color={color}
+			/>
+			<Progress
+				id={`fii_${title}`}
+				width={title === "Fiis" ? width : undefined}
+				color={color}
+				padLeft={title === "Fiis" && acaoWidth}
+			/>
+			<Progress
+				id={`fixa_${title}`}
+				width={title === "Renda Fixa" ? width : undefined}
+				color={color}
+				padLeft={title === "Renda Fixa" && acaoWidth + fiiWidth}
+			/>
 		</Bar>
 	);
 }

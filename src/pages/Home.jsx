@@ -149,44 +149,56 @@ function Home() {
 			/>
 			<Container showModal={showModal}>
 				<Loading loading={loading} absolute />
-				<Row>
-					<div>
-						<Title big>Minha Carteira</Title>
-						<Title medium>
-							Patrimônio: R$
-							{showValue
-								? total.toFixed(2).replace(".", ",")
-								: "****"}
-							{showValue ? (
-								<EyeOpened
-									size={25}
-									onClick={() => setShowValue(!showValue)}
-								/>
-							) : (
-								<EyeClosed
-									size={25}
-									onClick={() => setShowValue(!showValue)}
-								/>
-							)}
-						</Title>
-					</div>
 
-					{carteira.length > 0 && (
-						<Button danger small onClick={handleToggleModal}>
-							<GiWallet size={25} />
-						</Button>
-					)}
-				</Row>
 				{!loading &&
 					(carteira.length ? (
-						<Table
-							columns={columns}
-							showValue={showValue}
-							data={[acoes, fiis, fixa]}
-							total={total}
-							collapsed={collapsed}
-							handleCollapse={handleCollapse}
-						/>
+						<>
+							<Row>
+								<div>
+									<Title big>Minha Carteira</Title>
+									<Title medium>
+										Patrimônio: R$
+										{showValue
+											? total.toFixed(2).replace(".", ",")
+											: "****"}
+										{showValue ? (
+											<EyeOpened
+												size={25}
+												onClick={() =>
+													setShowValue(!showValue)
+												}
+											/>
+										) : (
+											<EyeClosed
+												size={25}
+												onClick={() =>
+													setShowValue(!showValue)
+												}
+											/>
+										)}
+									</Title>
+								</div>
+
+								{carteira.length > 0 && (
+									<Button
+										danger
+										small
+										onClick={handleToggleModal}
+									>
+										<GiWallet size={25} />
+									</Button>
+								)}
+							</Row>
+
+							<Table
+								columns={columns}
+								showValue={showValue}
+								data={[acoes, fiis, fixa]}
+								total={total}
+								collapsed={collapsed}
+								handleCollapse={handleCollapse}
+							/>
+						</>
 					) : (
 						<Upload uploadCarteira={uploadCarteira} />
 					))}

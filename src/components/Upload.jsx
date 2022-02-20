@@ -4,6 +4,7 @@ import styled, { useTheme } from "styled-components";
 import xlsxParser from "xlsx-parse-json";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { FaQuestion } from "react-icons/fa";
 
 import UploadContainer from "../components/UploadContainer";
 import DropContainer from "../components/DropContainer";
@@ -14,6 +15,9 @@ import Row from "../components/Row";
 import FileType from "../components/FileType";
 import Loading from "../components/Loading";
 import { isLogin } from "../routes/isLoggedIn";
+import Title from "./Title";
+import Tutorial from "./Tutorial";
+import Container from "./Container";
 
 const DeleteButton = styled(MdDelete)`
 	:hover {
@@ -29,6 +33,7 @@ const Upload = ({ uploadCarteira }) => {
 	const [validFiles, setValidFiles] = useState([]);
 	const [unsupportedFiles, setUnsupportedFiles] = useState([]);
 	const [errorMessage, setErrorMessage] = useState("");
+	const [showModal, setShowModal] = useState(false);
 	const theme = useTheme();
 
 	const session = isLogin();
@@ -215,58 +220,84 @@ const Upload = ({ uploadCarteira }) => {
 		});
 	};
 
-	return (
-		<UploadContainer>
-			<DropContainer
-				onDragOver={dragOver}
-				onDragEnter={dragEnter}
-				onDragLeave={dragLeave}
-				onDrop={fileDrop}
-				onClick={fileInputClicked}
-			>
-				<Loading loading={loading} absolute />
-				<Text>
-					<div className="upload-icon"></div>
-					Arraste e solte o arquivo(.xls, .xlsx) ou clique para
-					selecionar
-				</Text>
-				<InputFile
-					ref={fileInputRef}
-					type="file"
-					// multiple
-					onChange={filesSelected}
-				/>
-			</DropContainer>
-			{validFiles.map((data, i) => (
-				<Row key={i} style={{ width: "50%" }}>
-					<Row
-						style={{
-							justifyContent: "flex-start",
-							width: "90%",
-						}}
-					>
-						<FileType>{fileType(data.name)}</FileType>
-						<Text>{data.name}</Text>
-						<Text>({fileSize(data.size)})</Text>
-						{data.invalid && <Text danger>({errorMessage})</Text>}
-					</Row>
+	const handleToggleModal = () => {
+		setShowModal(!showModal);
+	};
 
-					<DeleteButton
-						size={24}
-						color={theme.danger}
-						onClick={() => removeFile(data.name)}
-					/>
-				</Row>
-			))}
-			<Row style={{ justifyContent: "center", width: "50%" }}>
-				<Button
-					onClick={() => uploadFiles()}
-					disabled={unsupportedFiles.length > 0 || !validFiles.length}
-				>
-					Upload
-				</Button>
-			</Row>
-		</UploadContainer>
+	return (
+		<>
+			<Tutorial
+				showModal={showModal}
+				handleToggleModal={handleToggleModal}
+			/>
+			<Container showModal={showModal}>
+				<UploadContainer>
+					<Row>
+						<Title big>Minha Carteira</Title>
+					</Row>
+					<Row style={{ justifyContent: "center" }}>
+						<Title medium>Como baixar o arquivo correto?</Title>
+						<Button small onClick={handleToggleModal}>
+							<FaQuestion />
+						</Button>
+					</Row>
+					<DropContainer
+						onDragOver={dragOver}
+						onDragEnter={dragEnter}
+						onDragLeave={dragLeave}
+						onDrop={fileDrop}
+						onClick={fileInputClicked}
+					>
+						<Loading loading={loading} absolute />
+						<Text>
+							<div className="upload-icon"></div>
+							Arraste e solte o arquivo(.xls, .xlsx) ou clique
+							para selecionar
+						</Text>
+						<InputFile
+							ref={fileInputRef}
+							type="file"
+							// multiple
+							onChange={filesSelected}
+						/>
+					</DropContainer>
+					{validFiles.map((data, i) => (
+						<Row key={i} style={{ width: "50%" }}>
+							<Row
+								style={{
+									justifyContent: "flex-start",
+									width: "90%",
+								}}
+							>
+								<FileType>{fileType(data.name)}</FileType>
+								<Text>{data.name}</Text>
+								<Text>({fileSize(data.size)})</Text>
+								{data.invalid && (
+									<Text danger>({errorMessage})</Text>
+								)}
+							</Row>
+
+							<DeleteButton
+								size={24}
+								color={theme.danger}
+								onClick={() => removeFile(data.name)}
+							/>
+						</Row>
+					))}
+					<Row style={{ justifyContent: "center", width: "50%" }}>
+						<Button
+							onClick={() => uploadFiles()}
+							disabled={
+								unsupportedFiles.length > 0 ||
+								!validFiles.length
+							}
+						>
+							Upload
+						</Button>
+					</Row>
+				</UploadContainer>
+			</Container>
+		</>
 	);
 };
 
