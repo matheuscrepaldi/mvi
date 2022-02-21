@@ -9,6 +9,8 @@ import { getUser } from "../routes/isLoggedIn";
 import Text from "../components/Text";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
+import useDynamicForm from "../hooks/useDynamicForm";
+import Autocomplete from "../components/Autocomplete";
 
 const Row = styled.div`
 	display: flex; /* the child elements would be grid items */
@@ -37,7 +39,8 @@ const Table = styled.div`
 
 const InputText = styled(Input)`
 	height: 30px;
-	min-width: auto;
+	width: 100px;
+	min-width: 100px;
 `;
 
 function Alertas() {
@@ -45,6 +48,8 @@ function Alertas() {
 	const [alertas, setAlertas] = useState([]);
 	const [novosAlertas, setNovosAlertas] = useState([]);
 	const [editarAlerta, setEditarAlerta] = useState("");
+	const { fields, setFields, handleInputChange } = useDynamicForm();
+	const [empresas, setEmpresas] = useState([]);
 
 	const user = getUser();
 
@@ -60,7 +65,21 @@ function Alertas() {
 				toast.error("Erro ao carregar dados");
 			});
 	}
+
+	async function getEmpresas() {
+		await fetch("https://brapi.ga/api/available")
+			.then((res) => {
+				setLoading(false);
+				setEmpresas(res?.stocks);
+			})
+			.catch(() => {
+				setLoading(false);
+				toast.error("Erro ao carregar dados");
+			});
+	}
+
 	useEffect(() => {
+		getEmpresas();
 		getAlertas();
 	}, []);
 
@@ -114,7 +133,28 @@ function Alertas() {
 	};
 
 	const editAlerta = (id) => {
+		const alerta = alertas.find((al) => al.alerta_id === id);
 		setEditarAlerta(id);
+		setFields(alerta);
+	};
+
+	const updateAlerta = async (id) => {
+		setLoading(true);
+		await axios
+			.put(`atualizarAlerta/${id}?usu_id=${user}`, {
+				...fields,
+				usu_id: user,
+			})
+			.then((res) => {
+				setLoading(false);
+				toast.success("Alerta alterado com sucesso");
+				setEditarAlerta("");
+				getAlertas();
+			})
+			.catch(() => {
+				setLoading(false);
+				toast.error("Erro ao carregar dados");
+			});
 	};
 
 	const removeAlerta = async (id) => {
@@ -130,6 +170,20 @@ function Alertas() {
 				setLoading(false);
 				toast.error("Erro ao carregar dados");
 			});
+	};
+
+	const cancelEdit = () => {
+		setEditarAlerta("");
+		setFields({});
+	};
+
+	const handleSelectValue = (value) => {
+		setFields({ ...fields, alerta_ticker: value });
+	};
+
+	const handleSelectNewValue = (value, id) => {
+		const result = novosAlertas.find((novo) => novo.id === id);
+		result[`alerta_ticker`] = value;
 	};
 
 	const columns = [
@@ -162,11 +216,7 @@ function Alertas() {
 								justifyContent: "center",
 							}}
 						>
-							<Button
-								small
-								onClick={addNewLine}
-								disabled={editarAlerta !== ""}
-							>
+							<Button small onClick={addNewLine}>
 								<BsPlus size={25} />
 							</Button>
 						</Column>
@@ -183,9 +233,7 @@ function Alertas() {
 						</Row>
 					)}
 					{alertas.map((alerta) => {
-						const isEdit =
-							alerta.alerta_id !== editarAlerta &&
-							alerta.alerta_id === "";
+						const isEdit = alerta.alerta_id === editarAlerta;
 
 						return (
 							<Row
@@ -214,7 +262,47 @@ function Alertas() {
 												color: "#808080",
 											}}
 										>
-											{value}
+											{isEdit ? (
+												column.acessor.includes(
+													"ticker"
+												) ? (
+													<Autocomplete
+														suggestions={empresas}
+														handleSelectValue={
+															handleSelectValue
+														}
+														inputValue={
+															alerta[
+																column.acessor
+															]
+														}
+													/>
+												) : (
+													<InputText
+														type={
+															column.acessor.includes(
+																"vlr"
+															)
+																? "number"
+																: undefined
+														}
+														disabled={column.acessor.includes(
+															"id"
+														)}
+														id={column.acessor}
+														defaultValue={
+															alerta[
+																column.acessor
+															]
+														}
+														onChange={
+															handleInputChange
+														}
+													/>
+												)
+											) : (
+												value
+											)}
 										</Column>
 									);
 								})}
@@ -222,22 +310,32 @@ function Alertas() {
 									<Button
 										small
 										success
-										disabled={isEdit}
 										onClick={() =>
-											editAlerta(alerta.alerta_id)
+											isEdit
+												? updateAlerta(alerta.alerta_id)
+												: editAlerta(alerta.alerta_id)
 										}
 									>
-										<BsPencil size={20} />
+										{isEdit ? (
+											<BsCheck size={25} />
+										) : (
+											<BsPencil size={20} />
+										)}
 									</Button>
 									<Button
 										small
 										danger
-										disabled={isEdit}
 										onClick={() =>
-											removeAlerta(alerta.alerta_id)
+											isEdit
+												? cancelEdit()
+												: removeAlerta(alerta.alerta_id)
 										}
 									>
-										<BsTrash size={20} />
+										{isEdit ? (
+											<BsX size={25} />
+										) : (
+											<BsTrash size={20} />
+										)}
 									</Button>
 								</Column>
 							</Row>
@@ -256,7 +354,17 @@ function Alertas() {
 										<Text>Novo alerta</Text>
 									</Column>
 									<Column>
-										<InputText
+										<Autocomplete
+											suggestions={empresas}
+											handleSelectValue={(value) =>
+												handleSelectNewValue(
+													value,
+													novo.id
+												)
+											}
+											inputValue={novo.alerta_ticker}
+										/>
+										{/* <InputText
 											id={`ticker_${novo.id}`}
 											defaultValue={novo.alerta_ticker}
 											onChange={(e) =>
@@ -266,7 +374,7 @@ function Alertas() {
 													`alerta_ticker`
 												)
 											}
-										/>
+										/> */}
 									</Column>
 									<Column>
 										<InputText
