@@ -6,6 +6,7 @@ import PublicRoute from "./routes/PublicRoute";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Alertas from "./pages/Alertas";
 
 function App() {
 	return (
@@ -23,6 +24,11 @@ function App() {
 						<PrivateRoute
 							component={Home}
 							path="/dashboard"
+							exact
+						/>
+						<PrivateRoute
+							component={Alertas}
+							path="/alertas"
 							exact
 						/>
 					</Switch>

@@ -117,6 +117,9 @@ function Menu() {
 					<Dropbtn className={path === "/mdi" && "selected"}>
 						<StyledLink to={"/mdi"}>MDI</StyledLink>
 					</Dropbtn>
+					<Dropbtn className={path === "/alertas" && "selected"}>
+						<StyledLink to={"/alertas"}>Alertas</StyledLink>
+					</Dropbtn>
 				</Row>
 				<List style={{ width: "20%" }}>
 					<Dropbtn>
