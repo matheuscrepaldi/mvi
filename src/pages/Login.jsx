@@ -240,14 +240,14 @@ function LoginPage(props) {
 
 			<StyledCardBack className={card === "cadastro" && "flip"}>
 				<Loading loading={loading} absolute />
-				<Row style={{ justifyContent: "center" }}>
+				{/* <Row style={{ justifyContent: "center" }}>
 					<img
 						src={LogoImage}
 						width="150px"
 						height="150px"
 						alt="logo"
 					/>
-				</Row>
+				</Row> */}
 				<Row>Nome</Row>
 				<Row>
 					<Input onChange={handleUserChange} />
