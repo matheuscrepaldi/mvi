@@ -6,6 +6,8 @@ import PublicRoute from "./routes/PublicRoute";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Rebalanceamento from "./pages/Rebalanceamento";
+import Mdi from "./pages/Mdi";
 import Alertas from "./pages/Alertas";
 
 function App() {
@@ -26,6 +28,12 @@ function App() {
 							path="/dashboard"
 							exact
 						/>
+						<PrivateRoute
+							component={Rebalanceamento}
+							path="/rebalanceamento"
+							exact
+						/>
+						<PrivateRoute component={Mdi} path="/mdi" exact />
 						<PrivateRoute
 							component={Alertas}
 							path="/alertas"
