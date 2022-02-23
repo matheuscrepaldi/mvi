@@ -85,12 +85,6 @@ const Row = styled.div`
 	margin: 10px;
 `;
 
-const Version = styled.span`
-	position: absolute;
-	bottom: 10px;
-	color: #ccc;
-`;
-
 const ButtonLogin = styled(Button)`
 	background-color: #1f75c4;
 
@@ -235,7 +229,6 @@ function LoginPage(props) {
 						Registrar-se
 					</a>
 				</Row>
-				<Version>v1.0.0</Version>
 			</StyledCardFront>
 
 			<StyledCardBack className={card === "cadastro" && "flip"}>
@@ -268,7 +261,6 @@ function LoginPage(props) {
 						Registrar
 					</ButtonLogin>
 				</Row>
-				<Version>v1.0.0</Version>
 			</StyledCardBack>
 		</Container>
 	);

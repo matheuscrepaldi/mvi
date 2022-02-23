@@ -48,7 +48,7 @@ function Mdi() {
 
 	const columns = [
 		{ header: "Ticker", acessor: "id", type: "number" },
-		{ header: "Empresa", acessor: "name", type: "number" },
+		// { header: "Empresa", acessor: "name", type: "number" },
 		{ header: "Janeiro", acessor: "jan", type: "boolean" },
 		{ header: "Fevereiro", acessor: "fev", type: "boolean" },
 		{ header: "Março", acessor: "mar", type: "boolean" },
