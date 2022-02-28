@@ -60,6 +60,14 @@ function CollapseHeader({
 
 	const width = (valorTotal * 100) / total;
 
+	sessionStorage.setItem(
+		title,
+		JSON.stringify({
+			porcentagem: width.toFixed(2).replace(".", ","),
+			valor: valorTotal.toFixed(2).replace(".", ","),
+		})
+	);
+
 	return (
 		<CollapseRow>
 			<LeftPanel>

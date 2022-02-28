@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from "recharts";
 import styled from "styled-components";
 import axios from "axios";
+import { AiOutlineCheck } from "react-icons/ai";
+import { ImWarning } from "react-icons/im";
 
 import Row from "../components/Row";
 import Title from "../components/Title";
@@ -43,16 +45,21 @@ function Rebalanceamento() {
 			await axios
 				.get(`buscaBlcConfig/${user}`)
 				.then((res) => {
-					// setLoading(false);
+					const total = JSON.parse(sessionStorage.getItem("total"));
 
 					const result = res?.data.map((dt) => {
+						const value2 =
+							(Number(total.valor.replace(",", ".")) *
+								Number(dt.bal_valor)) /
+							100;
+
 						return {
 							name: dt.bal_nome,
 							value: Number(dt.bal_valor),
-							// value2: 0,
+							value2: value2.toFixed(2).replace(".", ","),
 						};
 					});
-					console.log(result);
+
 					setData(result);
 				})
 				.catch(() => {
@@ -67,6 +74,7 @@ function Rebalanceamento() {
 		{ header: "Categoria", acessor: "name", type: "string" },
 		{ header: "% em carteira", acessor: "value", type: "number" },
 		{ header: "Valor", acessor: "value2", type: "number" },
+		{ header: "", acessor: "botao", type: "number" },
 	];
 
 	// const data = [
@@ -146,9 +154,25 @@ function Rebalanceamento() {
 					})}
 				</RowTable>
 				{data.map((dt, index) => {
+					let obj = {};
+
 					return (
 						<RowTable>
 							{columns.map((column) => {
+								if (dt["name"] === "Ação") {
+									obj = JSON.parse(
+										sessionStorage.getItem("Ações")
+									);
+								} else if (dt["name"] === "FII") {
+									obj = JSON.parse(
+										sessionStorage.getItem("Fiis")
+									);
+								} else {
+									obj = JSON.parse(
+										sessionStorage.getItem("Renda Fixa")
+									);
+								}
+
 								let value =
 									column.acessor === "name" ? (
 										<Title
@@ -160,17 +184,47 @@ function Rebalanceamento() {
 											{dt[column.acessor]}
 										</Title>
 									) : column.acessor === "value" ? (
-										<>
-											<Title>x</Title>
-											<Text>
+										<Column
+											style={{
+												border: "none",
+												flexDirection: "column",
+											}}
+										>
+											<Title style={{ margin: 5 }}>
+												{obj.porcentagem}%
+											</Title>
+											<Text style={{ margin: 5 }}>
+												Ideal:{" "}
 												{Number(
 													dt[column.acessor]
 												).toFixed(2)}
 												%
 											</Text>
-										</>
+										</Column>
+									) : column.acessor === "value2" ? (
+										<Column
+											style={{
+												border: "none",
+												flexDirection: "column",
+											}}
+										>
+											<Title style={{ margin: 5 }}>
+												R${obj.valor}
+											</Title>
+											<Text style={{ margin: 5 }}>
+												Ideal: R${dt[column.acessor]}
+											</Text>
+										</Column>
+									) : obj.valor === dt[column.acessor] ? (
+										<AiOutlineCheck
+											size={25}
+											color={"#23c85d"}
+										/>
 									) : (
-										dt[column.acessor]
+										<ImWarning
+											size={25}
+											color={"#dc3545"}
+										/>
 									);
 								const align =
 									column.type === "number"

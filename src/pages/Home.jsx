@@ -73,6 +73,14 @@ function Home() {
 			(cart) => cart.ativo_tipo === "FIXA"
 		);
 
+		sessionStorage.setItem(
+			"total",
+			JSON.stringify({
+				porcentagem: 100,
+				valor: valorTotal.toFixed(2).replace(".", ","),
+			})
+		);
+
 		setTotal(valorTotal);
 		setAcoes(filteredAcoes);
 		setFiis(filteredFiis);
