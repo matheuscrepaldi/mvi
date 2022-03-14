@@ -90,6 +90,10 @@ function Menu() {
 
 	const handleLogout = () => {
 		sessionStorage.removeItem("session");
+		sessionStorage.removeItem("total");
+		sessionStorage.removeItem("Fiis");
+		sessionStorage.removeItem("Ações");
+		sessionStorage.removeItem("Renda Fixa");
 	};
 
 	const path = window.location.pathname;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from "recharts";
 import styled from "styled-components";
 import axios from "axios";
@@ -78,7 +78,11 @@ function Rebalanceamento() {
 	const user = getUser();
 	const [data, setData] = useState([]);
 	const [edit, setEdit] = useState(false);
-	const [values, setValues] = useState({});
+	const [values, setValues] = useState({
+		Ação: 0,
+		FII: 0,
+		"Renda Fixa": 0,
+	});
 
 	async function getBalanco() {
 		await axios
@@ -206,6 +210,11 @@ function Rebalanceamento() {
 		setValues({ ...values, [`${id}`]: value });
 	};
 
+	const filteredData = useMemo(
+		() => data.filter((dt) => dt.value !== 0),
+		[data]
+	);
+
 	return (
 		<>
 			<Row>
@@ -214,7 +223,7 @@ function Rebalanceamento() {
 			<ResponsiveContainer width="100%" height="30%">
 				<PieChart width={400} height={400}>
 					<Pie
-						data={data}
+						data={filteredData}
 						cx="50%"
 						cy="50%"
 						labelLine={false}
@@ -249,6 +258,7 @@ function Rebalanceamento() {
 				</RowTable>
 				{data.map((dt, index) => {
 					let obj = {};
+					let rebalance = false;
 
 					return (
 						<RowTable>
@@ -267,9 +277,27 @@ function Rebalanceamento() {
 									);
 								}
 
-								console.log(obj.valor);
-								console.log(dt[column.acessor]);
-								console.log("- - - -");
+								if (!obj) {
+									obj = {
+										porcentagem: 0,
+										valor: 0,
+									};
+								}
+
+								if (column.acessor === "value") {
+									let valor =
+										typeof obj?.porcentagem === "number"
+											? obj?.porcentagem
+											: obj?.porcentagem.replace(
+													",",
+													"."
+											  );
+
+									rebalance =
+										Number(valor) === dt[column.acessor];
+								}
+
+								console.log(obj.porcentagem);
 
 								let value =
 									column.acessor === "name" ? (
@@ -289,7 +317,7 @@ function Rebalanceamento() {
 											}}
 										>
 											<Title style={{ margin: 5 }}>
-												{obj.porcentagem}%
+												{obj?.porcentagem}%
 											</Title>
 											<Text style={{ margin: 5 }}>
 												Ideal:
@@ -320,14 +348,13 @@ function Rebalanceamento() {
 											}}
 										>
 											<Title style={{ margin: 5 }}>
-												R${obj.valor}
+												R${obj?.valor}
 											</Title>
 											<Text style={{ margin: 5 }}>
 												Ideal: R${dt[column.acessor]}
 											</Text>
 										</Column>
-									) : obj.porcentagem ===
-									  dt[column.acessor] ? (
+									) : rebalance ? (
 										<AiOutlineCheck
 											size={25}
 											color={"#23c85d"}
