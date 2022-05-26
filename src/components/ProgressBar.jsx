@@ -21,6 +21,9 @@ const Progress = styled.div`
 function ProgressBar({ title, width, color }) {
 	const acaoWidth = document?.getElementById(`acao_Ações`)?.offsetWidth;
 	const fiiWidth = document?.getElementById(`fii_Fiis`)?.offsetWidth;
+	const fixaWidth = document?.getElementById(`fixa_Renda Fixa`)?.offsetWidth;
+	const criptoWidth = document?.getElementById(`cripto_Criptos`)?.offsetWidth;
+	const etfWidth = document?.getElementById(`etf_ETFs`)?.offsetWidth;
 
 	return (
 		<Bar>
@@ -40,6 +43,32 @@ function ProgressBar({ title, width, color }) {
 				width={title === "Renda Fixa" ? width : undefined}
 				color={color}
 				padLeft={title === "Renda Fixa" && acaoWidth + fiiWidth}
+			/>
+			<Progress
+				id={`cripto_${title}`}
+				width={title === "Criptos" ? width : undefined}
+				color={color}
+				padLeft={
+					title === "Criptos" && acaoWidth + fiiWidth + fixaWidth
+				}
+			/>
+			<Progress
+				id={`etf_${title}`}
+				width={title === "ETFs" ? width : undefined}
+				color={color}
+				padLeft={
+					title === "ETFs" &&
+					acaoWidth + fiiWidth + fixaWidth + criptoWidth
+				}
+			/>
+			<Progress
+				id={`stock_${title}`}
+				width={title === "Stocks" ? width : undefined}
+				color={color}
+				padLeft={
+					title === "Stocks" &&
+					acaoWidth + fiiWidth + fixaWidth + criptoWidth + etfWidth
+				}
 			/>
 		</Bar>
 	);

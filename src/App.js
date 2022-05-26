@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Rebalanceamento from "./pages/Rebalanceamento";
 import Mdi from "./pages/Mdi";
 import Alertas from "./pages/Alertas";
+import Transacoes from "./pages/Transacoes";
 
 function App() {
 	return (
@@ -37,6 +38,11 @@ function App() {
 						<PrivateRoute
 							component={Alertas}
 							path="/alertas"
+							exact
+						/>
+						<PrivateRoute
+							component={Transacoes}
+							path="/transacoes"
 							exact
 						/>
 					</Switch>

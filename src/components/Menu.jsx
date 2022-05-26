@@ -94,6 +94,9 @@ function Menu() {
 		sessionStorage.removeItem("Fiis");
 		sessionStorage.removeItem("Ações");
 		sessionStorage.removeItem("Renda Fixa");
+		sessionStorage.removeItem("Criptos");
+		sessionStorage.removeItem("ETFs");
+		sessionStorage.removeItem("Stocks");
 	};
 
 	const path = window.location.pathname;
@@ -110,6 +113,9 @@ function Menu() {
 					</Dropbtn>
 					<Dropbtn className={path === "/metas" && "selected"}>
 						<StyledLink to={"/metas"}>Metas</StyledLink>
+					</Dropbtn>
+					<Dropbtn className={path === "/transacoes" && "selected"}>
+						<StyledLink to={"/transacoes"}>Transações</StyledLink>
 					</Dropbtn>
 					<Dropbtn
 						className={path === "/rebalanceamento" && "selected"}

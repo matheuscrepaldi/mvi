@@ -19,6 +19,7 @@ const Container = styled.div`
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
+	overflow: hidden;
 `;
 
 const StyledCardFront = styled.div`
@@ -26,13 +27,13 @@ const StyledCardFront = styled.div`
 	background: #ffffff;
 	border-radius: 10px;
 	box-shadow: 0 10px 40px -14px rgba(99, 83, 83, 0.25);
-	padding: 30px;
+	padding: 25px;
 	margin: 10px;
 	flex-flow: column;
 	justify-content: center;
 	align-items: center;
-	width: 400px;
-	height: 70vh;
+	width: 100%;
+	height: 80vh;
 	border-radius: 20px;
 
 	overflow: hidden;
@@ -43,6 +44,18 @@ const StyledCardFront = styled.div`
 	transition: 1s transform;
 	transform-style: preserve-3d;
 	backface-visibility: hidden;
+
+	@media (min-width: 1024px) {
+		max-width: 400px;
+	}
+
+	@media (min-width: 768px) and (max-width: 1023px) {
+		max-width: 400px;
+	}
+
+	@media (max-width: 767px) {
+		max-width: 80%;
+	}
 
 	&.flip {
 		transform: rotateY(180deg);
@@ -55,13 +68,13 @@ const StyledCardBack = styled.div`
 	background: #ffffff;
 	border-radius: 10px;
 	box-shadow: 0 10px 40px -14px rgba(99, 83, 83, 0.25);
-	padding: 30px;
+	padding: 25px;
 	margin: 10px;
 	flex-flow: column;
-	justify-content: flex-start;
+	justify-content: center;
 	align-items: center;
-	width: 400px;
-	height: 70vh;
+	width: 100%;
+	height: 80vh;
 	border-radius: 20px;
 
 	overflow: hidden;
@@ -72,6 +85,18 @@ const StyledCardBack = styled.div`
 	transition: 1s transform;
 	transform-style: preserve-3d;
 	backface-visibility: hidden;
+
+	@media (min-width: 1024px) {
+		max-width: 400px;
+	}
+
+	@media (min-width: 768px) and (max-width: 1023px) {
+		max-width: 400px;
+	}
+
+	@media (max-width: 767px) {
+		max-width: 80%;
+	}
 
 	&.flip {
 		transform: rotateY(0deg);

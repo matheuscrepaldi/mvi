@@ -28,7 +28,7 @@ const EyeOpened = styled(FaRegEye)`
 	}
 `;
 
-function Home() {
+function Home(props) {
 	const [loading, setLoading] = useState(false);
 	const [carteira, setCarteira] = useState([]);
 	const [showModal, setShowModal] = useState(false);
@@ -36,6 +36,9 @@ function Home() {
 	const [acoes, setAcoes] = useState([]);
 	const [fiis, setFiis] = useState([]);
 	const [fixa, setFixa] = useState([]);
+	const [cripto, setCripto] = useState([]);
+	const [etf, setEtf] = useState([]);
+	const [stock, setStock] = useState([]);
 	const [total, setTotal] = useState(0);
 	const [showValue, setShowValue] = useState(true);
 	const user = getUser();
@@ -72,6 +75,15 @@ function Home() {
 		const filteredFixa = carteira.filter(
 			(cart) => cart.ativo_tipo === "FIXA"
 		);
+		const filteredCripto = carteira.filter(
+			(cart) => cart.ativo_tipo === "CRIPTO"
+		);
+		const filteredEtf = carteira.filter(
+			(cart) => cart.ativo_tipo === "ETF"
+		);
+		const filteredStock = carteira.filter(
+			(cart) => cart.ativo_tipo === "STOCK"
+		);
 
 		sessionStorage.setItem(
 			"total",
@@ -85,6 +97,9 @@ function Home() {
 		setAcoes(filteredAcoes);
 		setFiis(filteredFiis);
 		setFixa(filteredFixa);
+		setCripto(filteredCripto);
+		setEtf(filteredEtf);
+		setStock(filteredStock);
 	}, [carteira]);
 
 	const uploadCarteira = async (uploaded) => {
@@ -201,14 +216,19 @@ function Home() {
 							<Table
 								columns={columns}
 								showValue={showValue}
-								data={[acoes, fiis, fixa]}
+								data={[acoes, fiis, fixa, cripto, etf, stock]}
 								total={total}
 								collapsed={collapsed}
 								handleCollapse={handleCollapse}
 							/>
 						</>
 					) : (
-						<Upload uploadCarteira={uploadCarteira} />
+						<Upload
+							uploadCarteira={uploadCarteira}
+							handleManualUpload={() =>
+								props.history.push("/transacoes")
+							}
+						/>
 					))}
 			</Container>
 		</>

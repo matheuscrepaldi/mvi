@@ -5,6 +5,7 @@ import xlsxParser from "xlsx-parse-json";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FaQuestion } from "react-icons/fa";
+import { BsPlus } from "react-icons/bs";
 
 import UploadContainer from "../components/UploadContainer";
 import DropContainer from "../components/DropContainer";
@@ -26,7 +27,7 @@ const DeleteButton = styled(MdDelete)`
 	}
 `;
 
-const Upload = ({ uploadCarteira }) => {
+const Upload = ({ uploadCarteira, handleManualUpload }) => {
 	const fileInputRef = useRef();
 	const [selectedFiles, setSelectedFiles] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -236,7 +237,12 @@ const Upload = ({ uploadCarteira }) => {
 						<Title big>Minha Carteira</Title>
 					</Row>
 					<Row style={{ justifyContent: "center" }}>
-						<Title medium>Como baixar o arquivo correto?</Title>
+						<Title medium>Upload automático</Title>
+					</Row>
+					<Row style={{ justifyContent: "center" }}>
+						<Text style={{ margin: 0 }}>
+							Como baixar o arquivo correto?
+						</Text>
 						<Button small onClick={handleToggleModal}>
 							<FaQuestion />
 						</Button>

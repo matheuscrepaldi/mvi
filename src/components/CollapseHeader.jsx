@@ -49,7 +49,13 @@ function CollapseHeader({
 			? theme.primary
 			: title === "Fiis"
 			? "#23c85d"
-			: "#d0a811";
+			: title === "Renda Fixa"
+			? "#d0a811"
+			: title === "Criptos"
+			? "#ff8c00"
+			: title === "ETFs"
+			? "#00008b"
+			: "#9932cc";
 
 	let valorTotal = 0;
 	ativos.map((ativo) => {

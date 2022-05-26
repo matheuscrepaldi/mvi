@@ -8,10 +8,12 @@ const Container = styled.div`
 	flex-direction: column;
 	width: 100%;
 	height: fit-content;
+	/* overflow-y: auto;
+	overflow-x: hidden; */
 `;
 
 const Row = styled.div`
-	display: flex; /* the child elements would be grid items */
+	display: flex;
 
 	:nth-child(2n + 2) {
 		background: #f2f2f2;
@@ -32,7 +34,17 @@ function Table({ columns, data, collapsed, handleCollapse, total, showValue }) {
 			{data.map((filtered, i) => {
 				if (filtered.length) {
 					const title =
-						i === 0 ? "Ações" : i === 1 ? "Fiis" : "Renda Fixa";
+						i === 0
+							? "Ações"
+							: i === 1
+							? "Fiis"
+							: i === 2
+							? "Renda Fixa"
+							: i === 3
+							? "Criptos"
+							: i === 4
+							? "ETFs"
+							: "Stocks";
 
 					return (
 						<>
