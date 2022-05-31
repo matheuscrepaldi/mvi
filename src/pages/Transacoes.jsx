@@ -364,7 +364,8 @@ function Transacoes() {
 											: "flex-start";
 
 									const value =
-										column.acessor === "ativo_vlr_unit"
+										column.acessor === "ativo_vlr_unit" ||
+										column.acessor === "ativo_vlr_total"
 											? Number(alerta[column.acessor])
 													.toFixed(2)
 													.replace(".", ",")

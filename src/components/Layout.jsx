@@ -22,6 +22,7 @@ const Body = styled.div`
 	margin-top: 50px;
 	height: calc(100vh - 50px);
 	overflow: auto;
+	overflow-x: hidden;
 `;
 
 function Layout(props) {

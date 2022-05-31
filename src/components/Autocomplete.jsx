@@ -63,7 +63,7 @@ export default function Autocomplete({
 				.get(url)
 				.then((res) => {
 					if (lastRequest.current === searchText) {
-						setResults(res?.data?.stocks || res?.data?.coins);
+						setResults(res?.data?.stocks || res?.data?.coins || []);
 					}
 				})
 				.catch((e) => console.log(e));
