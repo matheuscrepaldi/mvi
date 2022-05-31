@@ -72,21 +72,6 @@ function Transacoes() {
 			});
 	}
 
-	async function getEmpresas() {
-		//get crypto
-		//https://brapi.ga/api/v2/crypto/available
-
-		await fetch("https://brapi.ga/api/available")
-			.then((res) => {
-				setLoading(false);
-				setEmpresas(res?.stocks);
-			})
-			.catch(() => {
-				setLoading(false);
-				toast.error("Erro ao carregar dados");
-			});
-	}
-
 	useEffect(() => {
 		getAlertas();
 	}, []);
@@ -97,6 +82,7 @@ function Transacoes() {
 			{
 				id: Math.random().toString(36).substr(2, 9),
 				ativo_ticker: "",
+				ativo_tipo: "",
 				ativo_vlr_unit: "",
 			},
 		]);
@@ -109,8 +95,9 @@ function Transacoes() {
 
 	function handleTableInputChange(e, key, id) {
 		const result = novosAlertas.find((novo) => novo.id === key);
-
 		result[`${id}`] = e.target.value;
+
+		setNovosAlertas([result]);
 	}
 
 	const addNewAlerta = async (id) => {
@@ -145,7 +132,7 @@ function Transacoes() {
 	};
 
 	const editAlerta = (id) => {
-		const alerta = alertas.find((al) => al.alerta_id === id);
+		const alerta = alertas.find((al) => al.ativo_id === id);
 		setEditarAlerta(id);
 		setFields(alerta);
 	};
@@ -199,6 +186,7 @@ function Transacoes() {
 	};
 
 	const columns = [
+		{ header: "ID", acessor: "ativo_id", type: "number" },
 		{ header: "Tipo", acessor: "ativo_tipo", type: "number" },
 		{ header: "Ativo", acessor: "ativo_ticker", type: "number" },
 		{ header: "Qtde", acessor: "ativo_qtd", type: "number" },
@@ -230,7 +218,11 @@ function Transacoes() {
 								justifyContent: "center",
 							}}
 						>
-							<Button small onClick={addNewLine}>
+							<Button
+								small
+								onClick={addNewLine}
+								disabled={novosAlertas.length}
+							>
 								<BsPlus size={25} />
 							</Button>
 						</Column>
@@ -246,114 +238,6 @@ function Transacoes() {
 							<Text>Sem dados</Text>
 						</Row>
 					)}
-					{alertas.map((alerta) => {
-						const isEdit = alerta.alerta_id === editarAlerta;
-
-						return (
-							<Row
-								style={{
-									width: "100%",
-									background: "#fff",
-								}}
-							>
-								{columns.map((column) => {
-									const align =
-										column.type === "number"
-											? "center"
-											: "flex-start";
-
-									const value =
-										column.acessor === "ativo_vlr_unit"
-											? Number(alerta[column.acessor])
-													.toFixed(2)
-													.replace(".", ",")
-											: alerta[column.acessor];
-
-									return (
-										<Column
-											style={{
-												justifyContent: align,
-												color: "#808080",
-											}}
-										>
-											{isEdit ? (
-												column.acessor.includes(
-													"ticker"
-												) ? (
-													<Autocomplete
-														handleSelectValue={
-															handleSelectValue
-														}
-														inputValue={
-															alerta[
-																column.acessor
-															]
-														}
-													/>
-												) : (
-													<InputText
-														type={
-															column.acessor.includes(
-																"vlr"
-															)
-																? "number"
-																: undefined
-														}
-														disabled={column.acessor.includes(
-															"id"
-														)}
-														id={column.acessor}
-														defaultValue={
-															alerta[
-																column.acessor
-															]
-														}
-														onChange={
-															handleInputChange
-														}
-													/>
-												)
-											) : (
-												value
-											)}
-										</Column>
-									);
-								})}
-								<Column>
-									<Button
-										small
-										success
-										onClick={() =>
-											isEdit
-												? updateAlerta(alerta.alerta_id)
-												: editAlerta(alerta.alerta_id)
-										}
-									>
-										{isEdit ? (
-											<BsCheck size={25} />
-										) : (
-											<BsPencil size={20} />
-										)}
-									</Button>
-									<Button
-										small
-										danger
-										onClick={() =>
-											isEdit
-												? cancelEdit()
-												: removeAlerta(alerta.alerta_id)
-										}
-									>
-										{isEdit ? (
-											<BsX size={25} />
-										) : (
-											<BsTrash size={20} />
-										)}
-									</Button>
-								</Column>
-							</Row>
-						);
-					})}
 					{novosAlertas.length > 0 &&
 						novosAlertas.map((novo) => {
 							return (
@@ -363,6 +247,9 @@ function Transacoes() {
 										background: "#fff",
 									}}
 								>
+									<Column>
+										<Text>Novo</Text>
+									</Column>
 									<Column>
 										<SelectInput
 											id={`vlr_${novo.id}`}
@@ -387,6 +274,7 @@ function Transacoes() {
 									</Column>
 									<Column>
 										<Autocomplete
+											type={novosAlertas[0]?.ativo_tipo}
 											handleSelectValue={(value) =>
 												handleSelectNewValue(
 													value,
@@ -459,6 +347,118 @@ function Transacoes() {
 								</Row>
 							);
 						})}
+					{alertas.map((alerta) => {
+						const isEdit = alerta.ativo_id === editarAlerta;
+
+						return (
+							<Row
+								style={{
+									width: "100%",
+									background: "#fff",
+								}}
+							>
+								{columns.map((column) => {
+									const align =
+										column.type === "number"
+											? "center"
+											: "flex-start";
+
+									const value =
+										column.acessor === "ativo_vlr_unit"
+											? Number(alerta[column.acessor])
+													.toFixed(2)
+													.replace(".", ",")
+											: alerta[column.acessor];
+
+									const conditions = ["id", "tipo", "ticker"];
+									const disabled = conditions.some((el) =>
+										column.acessor.includes(el)
+									);
+
+									return (
+										<Column
+											style={{
+												justifyContent: align,
+												color: "#808080",
+											}}
+										>
+											{isEdit ? (
+												column.acessor.includes(
+													"ticker"
+												) ? (
+													<Autocomplete
+														handleSelectValue={
+															handleSelectValue
+														}
+														inputValue={
+															alerta[
+																column.acessor
+															]
+														}
+														disabled={disabled}
+													/>
+												) : (
+													<InputText
+														type={
+															column.acessor.includes(
+																"vlr"
+															)
+																? "number"
+																: undefined
+														}
+														disabled={disabled}
+														id={column.acessor}
+														defaultValue={
+															alerta[
+																column.acessor
+															]
+														}
+														onChange={
+															handleInputChange
+														}
+													/>
+												)
+											) : (
+												value
+											)}
+										</Column>
+									);
+								})}
+								<Column>
+									<Button
+										small
+										success
+										onClick={() =>
+											isEdit
+												? updateAlerta(alerta.ativo_id)
+												: editAlerta(alerta.ativo_id)
+										}
+									>
+										{isEdit ? (
+											<BsCheck size={25} />
+										) : (
+											<BsPencil size={20} />
+										)}
+									</Button>
+									<Button
+										small
+										danger
+										onClick={() =>
+											isEdit
+												? cancelEdit()
+												: removeAlerta(alerta.ativo_id)
+										}
+									>
+										{isEdit ? (
+											<BsX size={25} />
+										) : (
+											<BsTrash size={20} />
+										)}
+									</Button>
+								</Column>
+							</Row>
+						);
+					})}
 				</Table>
 			</Row>
 		</>

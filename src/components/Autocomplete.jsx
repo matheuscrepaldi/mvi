@@ -33,10 +33,17 @@ const Label = styled(Text)`
 	}
 `;
 
-export default function Autocomplete({ inputValue, handleSelectValue }) {
+export default function Autocomplete({
+	inputValue,
+	handleSelectValue,
+	disabled,
+	type,
+}) {
 	const [searchText, setSearchText] = React.useState(inputValue);
 	const [results, setResults] = React.useState([]);
 	const lastRequest = React.useRef(null);
+
+	//https://brapi.ga/api/v2/crypto/available?search=BT
 
 	// this effect will be fired every time searchText changes
 	React.useEffect(() => {
@@ -44,16 +51,24 @@ export default function Autocomplete({ inputValue, handleSelectValue }) {
 		if (searchText.length >= 2 && lastRequest.current) {
 			// updating the ref variable with the current searchText
 			lastRequest.current = searchText;
+
+			let url =
+				type === "STOCK" || type === "ETF"
+					? `stockList/${searchText}`
+					: type === "CRIPTO"
+					? `crypto/${searchText}`
+					: `consultar?search=${searchText}`;
+
 			axios
-				.get(`consultar?search=${searchText}`)
+				.get(url)
 				.then((res) => {
 					if (lastRequest.current === searchText) {
-						setResults(res?.data?.stocks);
+						setResults(res?.data?.stocks || res?.data?.coins);
 					}
 				})
 				.catch((e) => console.log(e));
 		}
-	}, [searchText]);
+	}, [searchText, type]);
 
 	const onChangeInput = (e) => {
 		setSearchText(e.target.value);
@@ -68,7 +83,11 @@ export default function Autocomplete({ inputValue, handleSelectValue }) {
 
 	return (
 		<div className="App">
-			<InputText onChange={(e) => onChangeInput(e)} value={searchText} />
+			<InputText
+				onChange={(e) => onChangeInput(e)}
+				value={searchText}
+				disabled={disabled}
+			/>
 
 			{searchText?.length >= 2 && lastRequest.current === searchText && (
 				<Result>
