@@ -79,7 +79,7 @@ function Rebalanceamento() {
 	const [data, setData] = useState([]);
 	const [edit, setEdit] = useState(false);
 	const [values, setValues] = useState({
-		Ação: 0,
+		Ações: 0,
 		FII: 0,
 		"Renda Fixa": 0,
 	});
@@ -270,7 +270,7 @@ function Rebalanceamento() {
 					return (
 						<RowTable>
 							{columns.map((column) => {
-								if (dt["name"] === "Ação") {
+								if (dt["name"] === "Ações") {
 									obj = JSON.parse(
 										sessionStorage.getItem("Ações")
 									);

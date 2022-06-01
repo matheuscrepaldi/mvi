@@ -159,10 +159,10 @@ function Transacoes() {
 	const removeAlerta = async (id) => {
 		setLoading(true);
 		await axios
-			.delete(`deletarAlerta/${id}?usu_id=${user}`)
+			.delete(`deletarAtivos/${user}`, { ativo_id: [id] })
 			.then((res) => {
 				setLoading(false);
-				toast.success("Alerta excluído com sucesso");
+				toast.success("Transação excluída com sucesso");
 				getAlertas();
 			})
 			.catch(() => {
