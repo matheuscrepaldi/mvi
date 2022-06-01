@@ -168,7 +168,14 @@ function Rebalanceamento() {
 		},
 	];
 
-	const COLORS = ["#1f75c4", "#23c85d", "#d0a811"];
+	const COLORS = [
+		"#1f75c4",
+		"#23c85d",
+		"#d0a811",
+		"#ff8c00",
+		"#00008b",
+		"#9932cc",
+	];
 
 	const RADIAN = Math.PI / 180;
 	const renderCustomizedLabel = ({
@@ -271,9 +278,21 @@ function Rebalanceamento() {
 									obj = JSON.parse(
 										sessionStorage.getItem("Fiis")
 									);
-								} else {
+								} else if (dt["name"] === "Renda Fixa") {
 									obj = JSON.parse(
 										sessionStorage.getItem("Renda Fixa")
+									);
+								} else if (dt["name"] === "Criptos") {
+									obj = JSON.parse(
+										sessionStorage.getItem("Criptos")
+									);
+								} else if (dt["name"] === "ETFs") {
+									obj = JSON.parse(
+										sessionStorage.getItem("ETFs")
+									);
+								} else {
+									obj = JSON.parse(
+										sessionStorage.getItem("Stocks")
 									);
 								}
 
